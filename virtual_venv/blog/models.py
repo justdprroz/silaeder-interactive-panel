@@ -18,14 +18,11 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
-class Base():
+class Achievements():
     def get_database(name_exel_base: str, name_base: str): # name_base - название базы которую хотим назвать
         """Эта функция принимает название exel таблицы и название твое базы.
         И в результате создает файлы json и sql формата"""
         conn = sqlite3.connect(f"{name_base}.db") # создали файл пустой базы
-        wb = pd.read_excel(name_exel_base)# читаем exel таблицу
-        wb.to_sql(name="mytable", con=conn, if_exists="replace", index=True)# ковертирум в sql формат
-        conn.commit()
         
         cursor = conn.cursor()
         cursor.execute("""SELECT * FROM mytable """)
