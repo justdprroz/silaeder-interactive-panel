@@ -1,10 +1,10 @@
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import { Routes, Route, Link } from "solid-app-router";
-import { onMount, createSignal } from "solid-js";
+import { onMount, createSignal, onCleanup } from "solid-js";
 
 const api_url = "http://serverutl/"
 
-const [getAchievements, setAchievements] = createSignal("");
+const [getAchievementsJson, setAchievementsJson] = createSignal("");
 
 function ReturnMenu() {
     return (
@@ -16,13 +16,27 @@ function ReturnMenu() {
     )
 }
 
-function RequestAchievements() {
+function requestAchievements() {
     const filters = document.getElementsByClassName("filter-list");
-    console.log(filters);
+    const filter_data = {};
     for(let i = 0; i < filters.length; i++) {
-        setAchievements(getAchievements() + filters[i].children[0].id + " ");
+        filter_data[filters[i].children[0].id] = "";
+        const selections = filters[i].getElementsByClassName("selection-value");
+        const selected = [];
+        for(let j = 0; j < selections.length; j++) {
+            if(selections[j].checked == true) {
+                selected.push(selections[j].id);
+            }
+        }
+        for(let j = 0; j < selected.length; j++) {
+            if(j != selected.length - 1) {
+                filter_data[filters[i].children[0].id] += selected[j] + ","
+            } else {
+                filter_data[filters[i].children[0].id] += selected[j]
+            }
+        }
     } 
-    console.log(getAchievements());
+    setAchievementsJson(JSON.stringify(filter_data));
 }
 
 function Filter(props) {
@@ -30,23 +44,33 @@ function Filter(props) {
     // selections = [["api_key", "string"]]
     const category = props.category;
     const selections = props.selections;
+    let listener;
     onMount(() => {
         let checkList = document.getElementById(category[0] + '-list');
-        checkList.getElementsByClassName('anchor')[0].onclick = function() {
-            if (checkList.classList.contains('visible'))
+        checkList.getElementsByClassName('anchor')[0].onclick = function(evt) {
+            if (checkList.classList.contains('visible')){
                 checkList.classList.remove('visible');
-            else
+            } else {
                 checkList.classList.add('visible');
-        }
-
-        let buttons = document.getElementsByClassName("selection");
-        for(let i = 0; i < buttons.length; i++) {
-            buttons[i].onclick = function() {
-                console.log(buttons[i].children[0].id);
-                RequestAchievements();
             }
         }
+
+        listener = function(evt) {
+            if (!document.getElementById(category[0] + "-list").contains(evt.target)) {
+                if (checkList.classList.contains('visible'))
+                checkList.classList.remove('visible');
+            }
+        };
+
+        document.addEventListener("click", listener);
+
+        console.log("filter mounted");
     })
+
+    onCleanup(() => {
+        document.removeEventListener("click", listener);
+    })
+    
     return (
         <div id={category[0] + "-list"} class="filter-list dropdown-check-list align-top" style="margin: 5px">
             <button id={category[0]} type="button" class="anchor fs-1 text-white btn" style="background-color:#c45a8f">
@@ -55,8 +79,8 @@ function Filter(props) {
             <ul class="items">
                 <For each={selections}>{(selection, _i) =>
                     <li>
-                        <button type="button" class="selection fs-3 text-white btn w-100 d-flex justify-content-left" style="padding: 0px">
-                            <input id={selection[0]} type="checkbox"/>
+                        <button type="button" class="selection-button fs-3 text-white btn w-100 d-flex justify-content-left" style="padding: 0px">
+                            <input id={selection[0]} type="checkbox" class="selection-value" onclick={() => requestAchievements()}/>
                             <label for={selection[0]} class="w-100 h-100 d-flex justify-content-left">
                                 {selection[1]}
                             </label>
@@ -69,6 +93,9 @@ function Filter(props) {
 }
 
 function MainMenu() {
+    onMount(() => {
+        console.log("main menu mounted");
+    })
     return (
         <div class="h-100" style="font-family: 'efourpro'">
             <div class="container text-white h-100">
@@ -102,6 +129,9 @@ function MainMenu() {
 }
 
 function Achievements() {
+    onMount(() => {
+        console.log("achievements mounted");
+    })
     return (
         <div class="h-100" style="font-family: 'efourpro'">
             <ReturnMenu/>
@@ -125,7 +155,7 @@ function Achievements() {
             </div>
             <div class="d-flex justify-content-center align-items-center h-100">
                 <code>
-                    {getAchievements()}
+                    {getAchievementsJson()}
                 </code>
             </div>
         </div>
