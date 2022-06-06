@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
+from . import views
 
 
 class Post(models.Model):
@@ -44,7 +45,7 @@ class Base():
     def sort_data(objects: str):
         con = sqlite3.connect(f"{name_base}.db")
         cur = con.cursor()
-        objects_ = re.split('=|,', objects)
+        objects_ = re.split(',', objects)
         x = dict()
         for i in range(1, len(objects_)):
                 x[objects_[0]] = objects_[i]
