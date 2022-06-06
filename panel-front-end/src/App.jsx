@@ -2,7 +2,7 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import { Routes, Route, Link } from "solid-app-router";
 import { onMount, createSignal, onCleanup } from "solid-js";
 
-const api_url = "http://serverutl/"
+const api_url = "http://localhost:5000"
 
 const [getAchievementsJson, setAchievementsJson] = createSignal("");
 
@@ -17,6 +17,7 @@ function ReturnMenu() {
 }
 
 function requestAchievements() {
+    console.log("making request");
     const filters = document.getElementsByClassName("filter-list");
     const filter_data = {};
     for(let i = 0; i < filters.length; i++) {
@@ -35,7 +36,17 @@ function requestAchievements() {
                 filter_data[filters[i].children[0].id] += selected[j]
             }
         }
-    } 
+    }
+
+    let path = "/getachievements"
+    let params = ""
+    Object.entries(filter_data).map(item => {
+        params += item[0] + "=" + item[1] + "&"
+    })
+    let dataReq = new XMLHttpRequest();
+    dataReq.open("GET", api_url + path + "?" + params);
+    dataReq.send();
+
     setAchievementsJson(JSON.stringify(filter_data));
 }
 
