@@ -68,7 +68,7 @@ def sort_data(title, objects: str):
 				b = "Программирование"
 			x = models.Mytable.objects.filter(subject=b)
 		if i == "":
-			break
+			return json.dumps(table)
 		else:
 			for j in range(len(x)):
 				table.append({x[j].id: [x[j].name, x[j].teacher, x[j].subject]})
