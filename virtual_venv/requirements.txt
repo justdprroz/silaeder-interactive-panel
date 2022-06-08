@@ -8,5 +8,3 @@ pylint==2.6.0
 pylint-django==2.3.0
 pylint-plugin-utils==0.6
 whitenoise==5.2.
-sqlite3
-
