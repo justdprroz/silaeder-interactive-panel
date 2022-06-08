@@ -26,7 +26,7 @@ def get_database(name_exel_base: str, name_base: str): # name_base - назва�
 	"""Эта функция принимает название exel таблицы и название твое базы.
 	И в результате создает файлы json и sql формата"""
 	conn = sqlite3.connect("clubs.db") # создали файл пустой базы
-	a = "here"
+	
 	cursor = conn.cursor()
 	cursor.execute("""SELECT * FROM mytable """)
 	one_result = cursor.fetchall()
