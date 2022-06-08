@@ -19,10 +19,10 @@ def getachievements(request):
 		date_achievemebt = request.GET.get("name", "")
 			#if name_subject == "" and name_teacher == "" and date_achievemebt == "":
 			#	output = "{}".format(sort_data("all",[]))
-		output =  "{0}, {1}, {2}".format(
-									sort_data("subject", name_subject),
-									sort_data("teacher", name_teacher),
-									sort_data("name", date_achievemebt))
+		output =  "{}".format(									
+			sort_data("subject", name_subject),
+			sort_data("teacher", name_teacher),
+			sort_data("name", date_achievemebt))
 	else:
 		output = "{}".format(sort_data_2())
 	return HttpResponse(output, content_type="application/json")
@@ -68,7 +68,7 @@ def sort_data(title, objects: str):
 				b = "Программирование"
 			x = models.Mytable.objects.filter(subject=b)
 		if i == "":
-			return json.dumps(table)
+			return {}
 		else:
 			for j in range(len(x)):
 				table.append({x[j].id: [x[j].name, x[j].teacher, x[j].subject]})
