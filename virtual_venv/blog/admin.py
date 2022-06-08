@@ -1,4 +1,5 @@
 from django.contrib import admin
-from .models import Post
+from .models import BlogClubs, Mytable
 
-admin.site.register(Post)
+admin.site.register(Mytable)
+admin.site.register(BlogClubs)
