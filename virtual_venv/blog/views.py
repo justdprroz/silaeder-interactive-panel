@@ -80,4 +80,4 @@ def sort_data_2():
 	x = models.Mytable.objects.all()
 	for r in range(len(x)):
 		table.append({x[r].id: [x[r].name, x[r].teacher, x[r].subject]})
-	return table
+	return json.dumps(table)
