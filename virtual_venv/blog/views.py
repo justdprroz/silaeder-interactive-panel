@@ -46,13 +46,22 @@ def get_database(name_exel_base: str, name_base: str): # name_base - назва�
 def sort_data(title, objects: str):
 	objects_ = re.split(',', objects)
 	table = []
+	b = ""
 	for i in objects_:
 		if title == "name":
 			x = models.Mytable.objects.filter(name=i)
 		if title == "teacher":
 			x = models.Mytable.objects.filter(teacher=i)
 		if title == "subject":
-			x = models.Mytable.objects.filter(subject=i)
+			if i == "science":
+				b = "Научные"
+			elif i == "sport":
+				b = "Спортивные"
+			elif i == "game":
+				b = "Игровые"
+			elif i == "info":
+				b = "Программирование"
+			x = models.Mytable.objects.filter(subject=b)
 		if i == "":
 			break
 		else:
