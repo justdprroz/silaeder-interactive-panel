@@ -13,13 +13,18 @@ def achievements(request):
 
 #class Achievements():
 def getachievements(request):
-	name_subject = request.GET.get("subject", "")
-	name_teacher = request.GET.get("teacher", "")
-	date_achievemebt = request.GET.get("name", "")
-	output =  "{0}, {1}, {2}".format(
+	if "subject" in request.GET or "teacher" in request.GET or "name" in request.GET:
+		name_subject = request.GET.get("subject", "")
+		name_teacher = request.GET.get("teacher", "")
+		date_achievemebt = request.GET.get("name", "")
+			#if name_subject == "" and name_teacher == "" and date_achievemebt == "":
+			#	output = "{}".format(sort_data("all",[]))
+		output =  "{0}, {1}, {2}".format(
 									sort_data("subject", name_subject),
 									sort_data("teacher", name_teacher),
 									sort_data("name", date_achievemebt))
+	else:
+		output = "{}".format(sort_data_2())
 	return HttpResponse(output)
 
 def get_database(name_exel_base: str, name_base: str): # name_base - название базы которую хотим назвать
@@ -44,9 +49,9 @@ def get_database(name_exel_base: str, name_base: str): # name_base - назва�
 								json.dump(subjects, write_file)"""
 
 def sort_data(title, objects: str):
-	objects_ = re.split(',', objects)
 	table = []
 	b = ""
+	objects_ = re.split(',', objects)
 	for i in objects_:
 		if title == "name":
 			x = models.Mytable.objects.filter(name=i)
@@ -69,3 +74,10 @@ def sort_data(title, objects: str):
 				table.append({x[j].id: [x[j].name, x[j].teacher, x[j].subject]})
 
 	return json.dumps(table)
+
+def sort_data_2():
+	table = []
+	x = models.Mytable.objects.all()
+	for r in range(len(x)):
+		table.append({x[r].id: [x[r].name, x[r].teacher, x[r].subject]})
+	return table
