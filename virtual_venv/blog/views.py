@@ -25,7 +25,7 @@ def getachievements(request):
 									sort_data("name", date_achievemebt))
 	else:
 		output = "{}".format(sort_data_2())
-	return HttpResponse(output)
+	return HttpResponse(output, content_type="application/json")
 
 def get_database(name_exel_base: str, name_base: str): # name_base - название базы которую хотим назвать
 	"""Эта функция принимает название exel таблицы и название твое базы.
