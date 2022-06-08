@@ -5,6 +5,7 @@ import { onMount, createSignal, onCleanup } from "solid-js";
 const api_url = "http://localhost:5000"
 
 const [getAchievementsJson, setAchievementsJson] = createSignal("");
+const [getClubs, setClubs] = createSignal([]);
 
 function ReturnMenu() {
     return (
@@ -16,7 +17,7 @@ function ReturnMenu() {
     )
 }
 
-function requestAchievements() {
+function requestData(setter, path) {
     console.log("making request");
     const filters = document.getElementsByClassName("filter-list");
     const filter_data = {};
@@ -38,21 +39,22 @@ function requestAchievements() {
         }
     }
 
-    let path = "/getachievements"
-    let params = ""
+    let route = "/get" + path;
+    let params = "";
     Object.entries(filter_data).map(item => {
         params += item[0] + "=" + item[1] + "&"
     })
     let dataReq = new XMLHttpRequest();
-    dataReq.open("GET", api_url + path + "?" + params);
+    dataReq.onreadystatechange = function() {
+        if (dataReq.readyState === 4) {
+            setter(JSON.parse(dataReq.response));
+        }
+    }    
+    dataReq.open("GET", api_url + route + "?" + params);
     dataReq.send();
-
-    setAchievementsJson(JSON.stringify(filter_data));
 }
 
 function Filter(props) {
-    // category = ["api_key", "human-readable string"]
-    // selections = [["api_key", "string"]]
     const category = props.category;
     const selections = props.selections;
     let listener;
@@ -74,7 +76,6 @@ function Filter(props) {
         };
 
         document.addEventListener("click", listener);
-
         console.log("filter mounted");
     })
 
@@ -91,7 +92,7 @@ function Filter(props) {
                 <For each={selections}>{(selection, _i) =>
                     <li>
                         <button type="button" class="selection-button fs-3 text-white btn w-100 d-flex justify-content-left" style="padding: 0px">
-                            <input id={selection[0]} type="checkbox" class="selection-value" onclick={() => requestAchievements()}/>
+                            <input id={selection[0]} type="checkbox" class="selection-value" onclick={() => requestData(props.setter, props.path)}/>
                             <label for={selection[0]} class="w-100 h-100 d-flex justify-content-left">
                                 {selection[1]}
                             </label>
@@ -124,7 +125,7 @@ function MainMenu() {
                 </div>
                 <div class="row h-50">
                     <div class="col-sm d-flex justify-content-center align-items-center">
-                        <Link href="/sections" class="w-75 h-50">
+                        <Link href="/clubs" class="w-75 h-50">
                             <button type="button" class="fs-1 text-white btn w-100 h-100" style="background-color:#c45a8f">кружки</button>
                         </Link>
                     </div>
@@ -154,6 +155,8 @@ function Achievements() {
                         ["conference", "конференция"],
                         ["sport", "спорт"]
                     ]}
+                    setter={setAchievementsJson}
+                    path={"achievements"}
                 />
                 <Filter
                     category={["field", "область"]}
@@ -162,6 +165,8 @@ function Achievements() {
                         ["math", "математика"],
                         ["economy", "экономика"]
                     ]}
+                    setter={setAchievementsJson}
+                    path={"achievements"}
                 />
             </div>
             <div class="d-flex justify-content-center align-items-center h-100">
@@ -173,23 +178,44 @@ function Achievements() {
     )
 }
 
+function Clubs() {
+    return (
+        <div class="h-100" style="font-family: 'efourpro'">
+            <ReturnMenu/>
+            <div id="filters" class="position-absolute top-0 end-0">
+                <Filter
+                    category={["field", "область"]}
+                    selections={[
+                        ["informatics", "информатика"],
+                        ["playing", "игровые"],
+                        ["sport", "спортивные"],
+                        ["science", "научные"]
+                    ]}
+                    setter={setClubs}
+                    path={"clubs"}
+                />
+            </div>
+            <div class="d-flex justify-content-center align-items-center h-100">
+                <ul style="list-style: none;">
+                    <For each={getClubs()}>{(club, _i) =>
+                        <li style="white-space: pre; background: #ffffff; margin: 10px">
+                            {club[_i()][0]}<br/>
+                            {club[_i()][1]}<br/>
+                            {club[_i()][2]}<br/>
+                        </li>
+                    }</For>
+                </ul>
+            </div>
+        </div>
+    )
+}
+
 function Plan() {
     return (
         <div class="h-100" style="font-family: 'efourpro'">
             <ReturnMenu/>
             <h1 class="text-white h-100 d-flex justify-content-center align-items-center" style="font-family: 'efourpro'">
                 Plan WIP
-            </h1>
-        </div>
-    )
-}
-
-function Sections() {
-    return (
-        <div class="h-100" style="font-family: 'efourpro'">
-            <ReturnMenu/>
-            <h1 class="text-white h-100 d-flex justify-content-center align-items-center" style="font-family: 'efourpro'">
-                Section WIP
             </h1>
         </div>
     )
@@ -212,7 +238,7 @@ function App() {
             <Route path="/" element={<MainMenu/>} />
             <Route path="/achievements" element={<Achievements/>} />
             <Route path="/plan" element={<Plan/>} />
-            <Route path="/sections" element={<Sections/> } />
+            <Route path="/clubs" element={<Clubs/> } />
             <Route path="/facts" element={<Facts/> } />
         </Routes>
     );
