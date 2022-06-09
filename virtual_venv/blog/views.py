@@ -20,7 +20,8 @@ def getachievements(request):
 		output =  "{}".format(sort_data_circle("subject", name_subject), sort_data_circle("teacher", name_teacher))
 	else:
 		output = "{}".format(sort_data_all())
-	return HttpResponse(output)
+		
+	return HttpResponse(output, content_type="application/json")
 
 def get_database(title, objects: str): # name_base - название базы которую хотим назвать
 	table = []
@@ -39,7 +40,7 @@ def sort_data_circle(title, objects: str):
 		if title == "teacher":
 			x = models.Olympiads.objects.filter(head_teacher=i)
 		if title == "subject":
-			if i == "physic":
+			if i == "physics":
 				b = "физика"
 			elif i == "economy":
 				b = "экономика"
@@ -59,6 +60,12 @@ def sort_data_circle(title, objects: str):
 def sort_data_all():
 	table = []
 	x = models.Olympiads.objects.all()
-	for r in range(len(x)):
-		table.append({x[r].id: [x[r].event, x[r].clas, x[r].subject]})
+	columns = [f.attname for f in models.Olympiads._meta.get_fields()]
+	for r in range(len(columns)):
+		a = models.Olympiads.objects.values_list(columns[r])
+		b = []
+		for i in a:
+			b.append(i)
+		table.append({columns[r]: b})
+		
 	return json.dumps(table)
