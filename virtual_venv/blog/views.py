@@ -17,7 +17,7 @@ def getachievements(request):
 		name_subject = request.GET.get("subject", "")
 		name_teacher = request.GET.get("teacher", "")
 		date_achievemebt = request.GET.get("event", "")
-		output =  "{}".format(sort_data_circle("subject", name_subject), sort_data_circle("teacher", name_teacher))
+		output =  "{}".format(sort_data_achievements("subject", name_subject), sort_data_achievements("teacher", name_teacher))
 	else:
 		output = "{}".format(sort_data_all())
 		
@@ -30,7 +30,7 @@ def get_database(title, objects: str): # name_base - название базы �
 	for i in objects_:
 		pass
 
-def sort_data_circle(title, objects: str):
+def sort_data_achievements(title, objects: str):
 	table = []
 	b = ""
 	objects_ = re.split(',', objects)
@@ -49,23 +49,22 @@ def sort_data_circle(title, objects: str):
 			elif i == "info":
 				b = "Информатика"
 			x = models.Olympiads.objects.filter(subject=b)
+			b = []
+			for i in x:
+				b.append(i)
 		if i == "":
 			return {}
 		else:
 			for j in range(len(x)):
-				table.append({x[j].id: [x[j].event, x[j].head_teacher, x[j].subject]})
+				table.append({title: [x[j].event, x[j].head_teacher, x[j].subject]})
 
 	return json.dumps(table)
 
 def sort_data_all():
 	table = []
-	x = models.Olympiads.objects.all()
 	columns = [f.attname for f in models.Olympiads._meta.get_fields()]
 	for r in range(len(columns)):
-		a = models.Olympiads.objects.values_list(columns[r])
-		b = []
-		for i in a:
-			b.append(i)
-		table.append({columns[r]: b})
+		values_columns = list(models.Olympiads.objects.values_list(columns[r]))
+		table.append({columns[r]: values_columns})
 		
-	return json.dumps(table)
+	return table
