@@ -1,0 +1,18 @@
+[
+    [
+        {
+            "field": "info",
+            "teacher": "Legoshin"
+        },
+        {
+            "field": "sport",
+            "teacher": "OE"
+        }
+    ],
+    [
+        {"key": ["value11", "value21"]},
+        {"key1": ["value12", "value22"]},
+        {"key2": ["value13", "value23"]},
+        {"key3": ["value14", "value24"]}
+    ]
+]

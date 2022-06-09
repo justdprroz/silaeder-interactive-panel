@@ -6,7 +6,7 @@ from flask import jsonify
 app = Flask(__name__)
 CORS(app)
 
-@app.route('/getclubs/', methods=['GET'])
+@app.route('/getachievements/', methods=['GET'])
 def get():
     return jsonify(
         [
