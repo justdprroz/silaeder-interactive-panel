@@ -19,13 +19,10 @@ def getachievements(request):
 		date_achievemebt = request.GET.get("name", "")
 			#if name_subject == "" and name_teacher == "" and date_achievemebt == "":
 			#	output = "{}".format(sort_data("all",[]))
-		output =  "{}".format(									
-			sort_data("subject", name_subject),
-			sort_data("teacher", name_teacher),
-			sort_data("name", date_achievemebt))
+		output =  name_teacher
 	else:
 		output = "{}".format(sort_data_2())
-	return HttpResponse(output, content_type="application/json")
+	return HttpResponse(output)
 
 def get_database(name_exel_base: str, name_base: str): # name_base - название базы которую хотим назвать
 	"""Эта функция принимает название exel таблицы и название твое базы.
@@ -56,6 +53,7 @@ def sort_data(title, objects: str):
 		if title == "name":
 			x = models.Mytable.objects.filter(name=i)
 		if title == "teacher":
+
 			x = models.Mytable.objects.filter(teacher=i)
 		if title == "subject":
 			if i == "science":

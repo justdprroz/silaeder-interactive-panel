@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -50,6 +51,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'mysite.urls'
@@ -83,15 +86,15 @@ DATABASES = {
     },
     'clubs': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'clubs.db',
+        'NAME': BASE_DIR / 'clubs.sqlite3',
     },
     'conferences': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'conferences.db',
+        'NAME': BASE_DIR / 'conferences.sqlite3',
     },
     'olympiads': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'olympiads.db',
+        'NAME': BASE_DIR / 'olympiads.sqlite3',
     }
 }
 

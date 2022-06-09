@@ -43,4 +43,20 @@ class Mytable(models.Model):
     class Meta:
         managed = True
         db_table = 'mytable'
+
+class Olympiads(models.Model):
+    index = models.IntegerField(blank=True, null=True)
+    date = models.TextField(db_column='Date', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters. Field renamed because it ended with '_'.
+    event = models.TextField(db_column='Event', blank=True, null=True)
+    clas = models.TextField(db_column='Class', blank=True, null=True)
+    head_teacher = models.TextField(db_column='Head-teacher', blank=True, null=True)  # Field name made lowercase.
+    level = models.TextField(db_column='Level', blank=True, null=True)
+    subject = models.TextField(db_column='Subject', blank=True, null=True)  # Field name made lowercase.
+    participants = models.TextField(db_column='Participants', blank=True, null=True)
+    result = models.TextField(db_column='Result', blank=True, null=True)
+
+
+    class Meta:
+        managed = True
+        db_table = 'olympiads'
     
