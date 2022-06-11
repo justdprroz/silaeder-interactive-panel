@@ -1,10 +1,10 @@
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import { Routes, Route, Link } from "solid-app-router";
-import { onMount, createSignal, onCleanup } from "solid-js";
+import { onMount, createSignal, onCleanup, Show } from "solid-js";
 
 const api_url = "http://localhost:5000"
 
-const [getAchievementsJson, setAchievementsJson] = createSignal("");
+const [getAchievements, setAchievements] = createSignal("");
 const [getClubs, setClubs] = createSignal([]);
 
 function ReturnMenu() {
@@ -49,8 +49,8 @@ function requestData(setter, path) {
         if (dataReq.readyState === 4) {
             setter(JSON.parse(dataReq.response));
         }
-    }    
-    dataReq.open("GET", api_url + route + "?" + params);
+    }
+    dataReq.open("GET", api_url + route + "/?" + params, true);
     dataReq.send();
 }
 
@@ -104,6 +104,28 @@ function Filter(props) {
     )
 }
 
+function AchievementCard(props) {
+    return(
+        <div style="background-color:#c45a8f; margin:10px; height:25vh; width:25vw; padding: 10px" class="rounded">
+            <div class="d-flex justify-content-start">
+                <div style="height: 100px; width: 100px; background: #888888">
+                </div>
+                <div style="margin:10px">
+                    Кружок: {props.achievement[0]}<br/>
+                    Ведущий: {props.achievement[1]}<br/>
+                    Категория: {props.achievement[2]}<br/>
+                </div>
+            </div>
+            <div>
+                Описание<br/>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sed augue id massa egestas euismod vitae vitae ante. Nam mattis pharetra mauris, sed bibendum ipsum dictum in. Sed feugiat est in velit viverra imperdiet. Suspendisse suscipit nisi sem, id lobortis lorem mattis in. Praesent a eleifend lectus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aliquam suscipit faucibus aliquam. Phasellus eu vehicula arcu.
+
+
+            </div>
+        </div>
+    )
+}
+
 function MainMenu() {
     onMount(() => {
         console.log("main menu mounted");
@@ -145,34 +167,49 @@ function Achievements() {
         console.log("achievements mounted");
     })
     return (
-        <div class="h-100" style="font-family: 'efourpro'">
-            <ReturnMenu/>
-            <div id="filters" class="position-absolute top-0 end-0">
-                <Filter
-                    category={["category", "категория"]}
-                    selections={[
-                        ["olympiad", "олимпиада"],
-                        ["conference", "конференция"],
-                        ["sport", "спорт"]
-                    ]}
-                    setter={setAchievementsJson}
-                    path={"achievements"}
-                />
-                <Filter
-                    category={["field", "область"]}
-                    selections={[
-                        ["informatics", "информатика"],
-                        ["math", "математика"],
-                        ["economy", "экономика"]
-                    ]}
-                    setter={setAchievementsJson}
-                    path={"achievements"}
-                />
+        <div class="h-100 container" style="font-family: 'efourpro'">
+            <div class="row">
+                <header>
+                    <ReturnMenu/>
+                    <div id="filters" class="position-absolute top-0 end-0">
+                        <Filter
+                            category={["category", "категория"]}
+                            selections={[
+                                ["olympiad", "олимпиада"],
+                                ["conference", "конференция"],
+                                ["sport", "спорт"]
+                            ]}
+                            setter={setAchievements}
+                            path={"achievements"}
+                        />
+                        <Filter
+                            category={["field", "область"]}
+                            selections={[
+                                ["informatics", "информатика"],
+                                ["math", "математика"],
+                                ["economy", "экономика"]
+                            ]}
+                            setter={setAchievements}
+                            path={"achievements"}
+                        />
+                    </div>
+                </header>
             </div>
-            <div class="d-flex justify-content-center align-items-center h-100">
-                <code>
-                    {getAchievementsJson()}
-                </code>
+            <div class="row" style="font-family: 'Roboto', sans-serif;">
+                <div class="container w-75">
+                    <div class="row row-cols-2">
+                        <For each={getAchievements()}>{(achievement, _i) =>
+                        <>
+                            <div class="col h-25">
+                                <AchievementCard achievement={achievement[_i()]}/>
+                            </div>
+                            <Show when={_i() % 2 == 1}>
+                                <div class="w-100"></div>
+                            </Show>
+                        </>
+                        }</For>
+                    </div>
+                </div>
             </div>
         </div>
     )
@@ -195,17 +232,31 @@ function Clubs() {
                     path={"clubs"}
                 />
             </div>
-            <div class="d-flex justify-content-center align-items-center h-100">
-                <ul style="list-style: none;">
+            <div class="container w-50">
+                <div class="row row-cols-2">
+                    {/* <div class="col">Column</div>
+                    <div class="col">Column</div>
+                    <div class="w-100"></div>
+                    <div class="col">Column</div>
+                    <div class="col">Column</div> */}
                     <For each={getClubs()}>{(club, _i) =>
-                        <li style="white-space: pre; background: #ffffff; margin: 10px">
-                            {club[_i()][0]}<br/>
-                            {club[_i()][1]}<br/>
-                            {club[_i()][2]}<br/>
-                        </li>
+                    <>
+                        <div class="col">
+                            <div style="white-space: pre; background: #ffffff; margin: 10px">
+                                    {club[_i()][0]}<br/>
+                                    {club[_i()][1]}<br/>
+                                    {club[_i()][2]}<br/>
+                            </div>
+                        </div>
+                        <Show when={_i() % 2 == 1}>
+                            <div class="w-100">separator</div>
+                        </Show>
+                    </>
                     }</For>
-                </ul>
+                </div>
             </div>
+            {/* <div class="d-flex justify-content-center h-100" style="overflow: visible">
+            </div> */}
         </div>
     )
 }
