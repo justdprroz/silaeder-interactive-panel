@@ -74,6 +74,6 @@ def sort_data_all():
 			values_lines[r].subject,
 			values_lines[r].participants,
 			values_lines[r].result,]
-		table.append({values_lines[r].index: x})
+		table.append(x)
 		
 	return json.dumps(table)
