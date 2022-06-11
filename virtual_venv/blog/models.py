@@ -1,7 +1,6 @@
 from lib2to3.pgen2.token import NAME
 from django.conf import settings
 from django.db import models
-from django.utils import timezone
 from . import views
 
 

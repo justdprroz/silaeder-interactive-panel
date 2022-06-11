@@ -25,11 +25,11 @@ def getachievements(request):
 	if "subject" in request.GET or "teacher" in request.GET or "event" in request.GET:
 		name_subject = request.GET.get("subject", "")
 		name_teacher = request.GET.get("teacher", "")
-		event_achievemebt = request.GET.get("event", "")
+		level_achievement = request.GET.get("level", "")
 		output =  "{}".format(
 		sort_data_achievements("subject", name_subject),
 		sort_data_achievements("teacher", name_teacher),
-		sort_data_achievements("event", event_achievemebt))
+		sort_data_achievements("level", level_achievement))
 	else:
 		output = "{}".format(sort_data_all())
 		
@@ -46,13 +46,12 @@ def sort_data_achievements(title, objects: str):
 	table = []
 	objects_ = re.split(',', objects)
 	for i in objects_:
-		print(i)
 		if title == "subject":
 			values_lines = models.Olympiads.objects.filter(subject=words[i])
-		elif title == "event":
-			values_lines = models.Olympiads.objects.filter(event=words[i])
+		elif title == "level":
+			values_lines = models.Olympiads.objects.filter(level=i)
 		elif title == "teacher":
-			values_lines = models.Olympiads.objects.filter(subject=words[i])
+			values_lines = models.Olympiads.objects.filter(head_teacher=i)
 		for r in range(len(values_lines)):
 			x = [
 			values_lines[r].date,
