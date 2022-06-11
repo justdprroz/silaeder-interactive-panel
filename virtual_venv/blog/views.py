@@ -86,5 +86,5 @@ def sort_data_all():
 		a = []
 		for g in range(len(values_lines)):
 			a.append(values_lines.values_list(f"{columns[j]}", flat=True)[g])	
-		columns_list.append({columns[j]: a})
+		columns_list.append({columns[j]: list(set(a))})
 	return json.dumps(columns_list)
