@@ -88,7 +88,6 @@ def sort_data_all():
 		a = []
 		for g in range(len(values_lines)):
 			a.append(values_lines.values_list(f"{columns[j]}", flat=True)[g])	
-		print(a)
 		columns_list[columns[j]] = list(set(a))
 	result_table.append(table)
 	result_table.append(columns_list)
