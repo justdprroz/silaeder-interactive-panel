@@ -2,7 +2,7 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import { Routes, Route, Link } from "solid-app-router";
 import { onMount, createSignal, onCleanup, Show } from "solid-js";
 
-const api_url = "http://localhost:5000"
+const api_url = "http://localhost:8000"
 
 const [getAchievements, setAchievements] = createSignal("");
 const [getClubs, setClubs] = createSignal([]);
@@ -111,9 +111,28 @@ function AchievementCard(props) {
                 <div style="height: 100px; width: 100px; background: #888888">
                 </div>
                 <div style="margin:10px">
-                    Кружок: {props.achievement[0]}<br/>
-                    Ведущий: {props.achievement[1]}<br/>
-                    Категория: {props.achievement[2]}<br/>
+                    Событие: {props.achievement[1]}<br/>
+                    Предмет: {props.achievement[5]}<br/>
+                </div>
+            </div>
+            <div>
+                Участники: {props.achievement[6]}<br/>
+                Награда: {props.achievement[7]}<br/>
+            </div>
+        </div>
+    )
+}
+
+function ClubCard(props) {
+    return(
+        <div style="background-color:#c45a8f; margin:10px; height:25vh; width:25vw; padding: 10px" class="rounded">
+            <div class="d-flex justify-content-start">
+                <div style="height: 100px; width: 100px; background: #888888">
+                </div>
+                <div style="margin:10px">
+                    Кружок: {props.club[0]}<br/>
+                    Ведущий: {props.club[1]}<br/>
+                    Категория: {props.club[2]}<br/>
                 </div>
             </div>
             <div>
@@ -201,7 +220,7 @@ function Achievements() {
                         <For each={getAchievements()}>{(achievement, _i) =>
                         <>
                             <div class="col h-25">
-                                <AchievementCard achievement={achievement[_i()]}/>
+                                <AchievementCard achievement={achievement}/>
                             </div>
                             <Show when={_i() % 2 == 1}>
                                 <div class="w-100"></div>
