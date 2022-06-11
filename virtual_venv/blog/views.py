@@ -1,3 +1,4 @@
+from unittest import result
 from django.shortcuts import render
 from django.http import HttpResponse
 from requests import request
@@ -67,6 +68,7 @@ def sort_data_achievements(title, objects: str):
 
 def sort_data_all():
 	table = []
+	result_table = []
 	columns = [f.attname for f in models.Olympiads._meta.get_fields()]
 	del columns[0:2]
 	columns_list = []
@@ -81,11 +83,10 @@ def sort_data_all():
 			values_lines[r].subject,
 			values_lines[r].participants,
 			values_lines[r].result,]
+		columns_list = []
+		for g in range(len(columns)):
+			columns_list.append({f"{columns[g]}": values_lines.values_list(f"{columns[g]}", flat=True)[r]})
 		table.append(x)
-	for j in range(len(columns)):
-		a = []
-		for g in range(len(values_lines)):
-			a.append(values_lines.values_list(f"{columns[j]}", flat=True)[g])	
-		columns_list.append({columns[j]: list(set(a))})
-	table.append(columns_list)
+		table.append(columns_list)
+
 	return json.dumps(table)
