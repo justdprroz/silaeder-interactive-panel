@@ -71,7 +71,7 @@ def sort_data_all():
 	result_table = []
 	columns = [f.attname for f in models.Olympiads._meta.get_fields()]
 	del columns[0:2]
-	columns_list = []
+	columns_list = dict()
 	values_lines = models.Olympiads.objects.all()
 	for r in range(len(values_lines)):
 		x = [
@@ -88,7 +88,8 @@ def sort_data_all():
 		a = []
 		for g in range(len(values_lines)):
 			a.append(values_lines.values_list(f"{columns[j]}", flat=True)[g])	
-		columns_list.append({columns[j]: list(set(a))})
+		print(a)
+		columns_list[columns[j]] = list(set(a))
 	result_table.append(table)
 	result_table.append(columns_list)
 	return json.dumps(result_table)
