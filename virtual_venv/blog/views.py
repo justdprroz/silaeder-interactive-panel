@@ -68,6 +68,8 @@ def sort_data_achievements(title, objects: str):
 def sort_data_all():
 	table = []
 	columns = [f.attname for f in models.Olympiads._meta.get_fields()]
+	del columns[0:2]
+	columns_list = []
 	values_lines = models.Olympiads.objects.all()
 	for r in range(len(values_lines)):
 		x = [
@@ -80,5 +82,9 @@ def sort_data_all():
 			values_lines[r].participants,
 			values_lines[r].result,]
 		table.append(x)
-		
-	return json.dumps(table)
+	for j in range(len(columns)):
+		a = []
+		for g in range(len(values_lines)):
+			a.append(values_lines.values_list(f"{columns[j]}", flat=True)[g])	
+		columns_list.append({columns[j]: a})
+	return json.dumps(columns_list)
