@@ -29,10 +29,10 @@ def getachievements(request):
 	if "subject" in request.GET:
 		name_subject = request.GET.get("subject", "")
 		output =  "{}".format(sort_data_achievements("subject", name_subject),)
-	elif "teacher" in request.GET :
+	if "teacher" in request.GET :
 		name_teacher = request.GET.get("teacher", "")
 		output =  "{}".format(sort_data_achievements("teacher", name_teacher))
-	elif "level" in request.GET:
+	if "level" in request.GET:
 		level_achievement = request.GET.get("level", "")
 		output =  "{}".format(sort_data_achievements("level", level_achievement))
 	else:
