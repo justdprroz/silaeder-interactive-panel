@@ -26,15 +26,15 @@ def gethobbies(request):
 	return HttpResponse(output, content_type="application/json")
 
 def getachievements(request):
-	if "subject" in request.GET:
+	if request.GET.get("subject", "") != '':
 		name_subject = request.GET.get("subject", "")
-		output =  "{}".format(sort_data_achievements("subject", name_subject),)
-	if "teacher" in request.GET :
+		output = "{}".format(sort_data_achievements("subject", name_subject))
+	elif request.GET.get("teacher", "") != '':
 		name_teacher = request.GET.get("teacher", "")
-		output =  "{}".format(sort_data_achievements("teacher", name_teacher))
-	if "level" in request.GET:
+		output = "{}".format(sort_data_achievements("teacher", name_teacher))
+	elif request.GET.get("level", "") != '':
 		level_achievement = request.GET.get("level", "")
-		output =  "{}".format(sort_data_achievements("level", level_achievement))
+		output = "{}".format(sort_data_achievements("level", level_achievement))
 	else:
 		output = "{}".format(sort_data_all_achievements())
 		
