@@ -42,7 +42,7 @@ def getachievements(request):
 
 def filters_achievement(table):
 	result_table = []
-	columns = ['event', 'head_teacher', 'level', 'subject']
+	columns = ['event', 'level', 'subject']
 	columns_list = dict()
 	values_lines = models.Olympiads.objects.all()
 	for j in range(len(columns)):
@@ -58,7 +58,6 @@ def filters_hobbies(table):
 	result_table = []
 	columns = ['subject', 'teacher']
 	columns_list = dict()
-	del columns[0:2]
 	values_lines = models.Mytable.objects.all()
 	for j in range(len(columns)):
 		a = []
