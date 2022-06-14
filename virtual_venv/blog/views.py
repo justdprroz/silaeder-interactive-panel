@@ -23,32 +23,53 @@ words = {
 	"CTF": "CTF",
 }
 def getachievements(request):
-	if "subject" in request.GET or "teacher" in request.GET or "event" in request.GET:
+	if "subject" in request.GET:
 		name_subject = request.GET.get("subject", "")
+		output =  "{}".format(sort_data_achievements("subject", name_subject),)
+	elif "teacher" in request.GET :
 		name_teacher = request.GET.get("teacher", "")
+		output =  "{}".format(sort_data_achievements("teacher", name_teacher))
+	elif "level" in request.GET:
 		level_achievement = request.GET.get("level", "")
-		output =  "{}".format(
-		sort_data_achievements("subject", name_subject),
-		sort_data_achievements("teacher", name_teacher),
-		sort_data_achievements("level", level_achievement))
+		output =  "{}".format(sort_data_achievements("level", level_achievement))
 	else:
 		output = "{}".format(sort_data_all())
 		
 	return HttpResponse(output, content_type="application/json")
 
-def get_database(title, objects: str): # name_base - название базы которую хотим назвать
+def get_hobbies(title, objects: str): # name_base - название базы которую хотим назвать
 	table = []
-	b = ""
-	objects_ = re.split(',', objects)
-	for i in objects_:
-		pass
+	result_table = []
+	columns = [f.attname for f in models.Olympiads._meta.get_fields()]
+	del columns[0:2]
+	columns_list = dict()
+	values_lines = models.Olympiads.objects.all()
+	for r in range(len(values_lines)):
+		x = [
+			values_lines[r].date,
+			values_lines[r].event,
+			values_lines[r].clas,
+			values_lines[r].head_teacher,
+			values_lines[r].level,
+			values_lines[r].subject,
+			values_lines[r].participants,
+			values_lines[r].result,]
+		table.append(x)
+	for j in range(len(columns)):
+		a = []
+		for g in range(len(values_lines)):
+			a.append(values_lines.values_list(f"{columns[j]}", flat=True)[g])	
+		columns_list[columns[j]] = list(set(a))
+	result_table.append(table)
+	result_table.append(columns_list)
+	return json.dumps(result_table)
 
 def sort_data_achievements(title, objects: str):
 	table = []
 	objects_ = re.split(',', objects)
 	for i in objects_:
 		if title == "subject":
-			values_lines = models.Olympiads.objects.filter(subject=words[i])
+			values_lines = models.Olympiads.objects.filter(subject=i)
 		elif title == "level":
 			values_lines = models.Olympiads.objects.filter(level=i)
 		elif title == "teacher":
