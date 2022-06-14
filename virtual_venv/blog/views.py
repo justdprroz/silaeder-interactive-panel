@@ -14,10 +14,10 @@ def achievements(request):
 	return render(request, 'blog/achievements.html', {})
 
 def gethobbies(request):
-	if "subject" in request.GET:
+	if request.GET.get("subject", "") != '':
 		name_subject = request.GET.get("subject", "")
 		output =  "{}".format(sort_data_hobbies("subject", name_subject),)
-	elif "teacher" in request.GET :
+	elif  request.GET.get("teacher", "") != '':
 		name_teacher = request.GET.get("teacher", "")
 		output =  "{}".format(sort_data_hobbies("teacher", name_teacher))
 	else:
