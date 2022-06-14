@@ -40,12 +40,27 @@ def getachievements(request):
 		
 	return HttpResponse(output, content_type="application/json")
 
-def filters(table):
+def filters_achievement(table):
 	result_table = []
 	columns = [f.attname for f in models.Olympiads._meta.get_fields()]
 	columns_list = dict()
 	del columns[0:2]
 	values_lines = models.Olympiads.objects.all()
+	for j in range(len(columns)):
+		a = []
+		for g in range(len(values_lines)):
+			a.append(values_lines.values_list(f"{columns[j]}", flat=True)[g])	
+		columns_list[columns[j]] = list(set(a))
+	result_table.append(table)
+	result_table.append(columns_list)
+	return result_table
+
+def filters_hobbies(table):
+	result_table = []
+	columns = [f.attname for f in models.Mytable._meta.get_fields()]
+	columns_list = dict()
+	del columns[0:2]
+	values_lines = models.Mytable.objects.all()
 	for j in range(len(columns)):
 		a = []
 		for g in range(len(values_lines)):
@@ -97,7 +112,7 @@ def sort_data_achievements(title, objects: str):
 			values_lines[r].participants,
 			values_lines[r].result,]
 			table.append(x)
-	result_table = filters(table)
+	result_table = filters_achievement(table)
 	return json.dumps(result_table)
 
 def sort_data_all_achievements():
@@ -118,7 +133,7 @@ def sort_data_all_achievements():
 			values_lines[r].participants,
 			values_lines[r].result,]
 		table.append(x)
-	result_table = filters(table, values_lines)
+	result_table = filters_achievement(table)
 	return json.dumps(result_table)
 
 def sort_data_all_hobbies():
