@@ -1,11 +1,12 @@
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import { Routes, Route, Link } from "solid-app-router";
-import { onMount, createSignal, onCleanup, Show } from "solid-js";
+import { onMount, createSignal, onCleanup, Show, For } from "solid-js";
 
 const api_url = "http://localhost:8000"
 
-const [getAchievements, setAchievements] = createSignal("");
+const [getAchievements, setAchievements] = createSignal([]);
 const [getClubs, setClubs] = createSignal([]);
+const [getFilters, setFilters] = createSignal([]);
 
 function ReturnMenu() {
     return (
@@ -47,7 +48,8 @@ function requestData(setter, path) {
     let dataReq = new XMLHttpRequest();
     dataReq.onreadystatechange = function() {
         if (dataReq.readyState === 4) {
-            setter(JSON.parse(dataReq.response));
+            setter(JSON.parse(dataReq.response)[0]);
+            setFilters(JSON.parse(dataReq.response)[1]);
         }
     }
     dataReq.open("GET", api_url + route + "/?" + params, true);
@@ -59,7 +61,7 @@ function Filter(props) {
     const selections = props.selections;
     let listener;
     onMount(() => {
-        let checkList = document.getElementById(category[0] + '-list');
+        let checkList = document.getElementById(category + '-list');
         checkList.getElementsByClassName('anchor')[0].onclick = function(evt) {
             if (checkList.classList.contains('visible')){
                 checkList.classList.remove('visible');
@@ -69,7 +71,7 @@ function Filter(props) {
         }
 
         listener = function(evt) {
-            if (!document.getElementById(category[0] + "-list").contains(evt.target)) {
+            if (!document.getElementById(category + "-list").contains(evt.target)) {
                 if (checkList.classList.contains('visible'))
                 checkList.classList.remove('visible');
             }
@@ -84,22 +86,38 @@ function Filter(props) {
     })
     
     return (
-        <div id={category[0] + "-list"} class="filter-list dropdown-check-list align-top" style="margin: 5px">
-            <button id={category[0]} type="button" class="anchor fs-1 text-white btn" style="background-color:#c45a8f">
-                <span>{category[1]}</span>
+        <div id={category + "-list"} class="filter-list dropdown-check-list align-top" style="margin: 5px">
+            <button id={category} type="button" class="anchor fs-1 text-white btn" style="background-color:#c45a8f">
+                <span>{category}</span>
             </button>
             <ul class="items">
                 <For each={selections}>{(selection, _i) =>
                     <li>
                         <button type="button" class="selection-button fs-3 text-white btn w-100 d-flex justify-content-left" style="padding: 0px">
-                            <input id={selection[0]} type="checkbox" class="selection-value" onclick={() => requestData(props.setter, props.path)}/>
-                            <label for={selection[0]} class="w-100 h-100 d-flex justify-content-left">
-                                {selection[1]}
+                            <input id={selection} type="checkbox" class="selection-value" onclick={() => requestData(props.setter, props.path)}/>
+                            <label for={selection} class="w-100 h-100 d-flex justify-content-left">
+                                {selection}
                             </label>
                         </button>
                     </li>
                 }</For>
             </ul>
+        </div>
+    )
+}
+
+function AllFilters(props) {
+    return (
+        <div id="filters" class="position-absolute top-0 end-0">
+            {/* {console.log(getFilters())} */}
+            <For each={Object.keys(getFilters())}>{(filter, _i) => 
+                <Filter
+                    category={filter}
+                    selections={getFilters()[filter]}
+                    setter={props.setter}
+                    path={props.path}
+                />
+            }</For>
         </div>
     )
 }
@@ -183,6 +201,7 @@ function MainMenu() {
 
 function Achievements() {
     onMount(() => {
+        requestData(setAchievements, "achievements")
         console.log("achievements mounted");
     })
     return (
@@ -190,28 +209,7 @@ function Achievements() {
             <div class="row">
                 <header>
                     <ReturnMenu/>
-                    <div id="filters" class="position-absolute top-0 end-0">
-                        <Filter
-                            category={["category", "категория"]}
-                            selections={[
-                                ["olympiad", "олимпиада"],
-                                ["conference", "конференция"],
-                                ["sport", "спорт"]
-                            ]}
-                            setter={setAchievements}
-                            path={"achievements"}
-                        />
-                        <Filter
-                            category={["field", "область"]}
-                            selections={[
-                                ["informatics", "информатика"],
-                                ["math", "математика"],
-                                ["economy", "экономика"]
-                            ]}
-                            setter={setAchievements}
-                            path={"achievements"}
-                        />
-                    </div>
+                    <AllFilters setter={setAchievements} path="achievements"/>
                 </header>
             </div>
             <div class="row" style="font-family: 'Roboto', sans-serif;">
