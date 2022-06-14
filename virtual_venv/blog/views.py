@@ -56,7 +56,7 @@ def filters_achievement(table):
 
 def filters_hobbies(table):
 	result_table = []
-	columns = ['subject', 'head_teacher']
+	columns = ['subject', 'teacher']
 	columns_list = dict()
 	del columns[0:2]
 	values_lines = models.Mytable.objects.all()
