@@ -3,7 +3,6 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from requests import request
 from . import models
-import sqlite3
 import json
 import re
 
@@ -29,9 +28,9 @@ def getachievements(request):
 	if request.GET.get("subject", "") != '':
 		name_subject = request.GET.get("subject", "")
 		output = "{}".format(sort_data_achievements("subject", name_subject))
-	elif request.GET.get("teacher", "") != '':
-		name_teacher = request.GET.get("teacher", "")
-		output = "{}".format(sort_data_achievements("teacher", name_teacher))
+	elif request.GET.get("event", "") != '':
+		event_achievement = request.GET.get("event", "")
+		output = "{}".format(sort_data_achievements("event", event_achievement))
 	elif request.GET.get("level", "") != '':
 		level_achievement = request.GET.get("level", "")
 		output = "{}".format(sort_data_achievements("level", level_achievement))
@@ -94,8 +93,8 @@ def sort_data_achievements(title, objects: str):
 			values_lines = models.Olympiads.objects.filter(subject=i)
 		elif title == "level":
 			values_lines = models.Olympiads.objects.filter(level=i)
-		elif title == "teacher":
-			values_lines = models.Olympiads.objects.filter(head_teacher=i)
+		elif title == "event":
+			values_lines = models.Olympiads.objects.filter(event=i)
 		for r in range(len(values_lines)):
 			x = [
 			values_lines[r].date,
