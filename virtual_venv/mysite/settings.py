@@ -83,19 +83,7 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'clubs.sqlite3',
-    },
-    'clubs': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'clubs.sqlite3',
-    },
-    'conferences': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'conferences.sqlite3',
-    },
-    'olympiads': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'olympiads.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
