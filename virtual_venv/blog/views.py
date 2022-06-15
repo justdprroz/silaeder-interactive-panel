@@ -16,9 +16,6 @@ def gethobbies(request):
 	if request.GET.get("subject", "") != '':
 		name_subject = request.GET.get("subject", "")
 		output =  "{}".format(sort_data_hobbies("subject", name_subject),)
-	elif  request.GET.get("teacher", "") != '':
-		name_teacher = request.GET.get("teacher", "")
-		output =  "{}".format(sort_data_hobbies("teacher", name_teacher))
 	else:
 		output = "{}".format(sort_data_all_hobbies())
 		
@@ -70,7 +67,7 @@ def filters_achievement(table):
 
 def filters_hobbies(table):
 	result_table = []
-	columns = ['subject', 'teacher']
+	columns = ['subject']
 	columns_list = dict()
 	values_lines = models.Hobbies.objects.all()
 	for j in range(len(columns)):
