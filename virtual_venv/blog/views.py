@@ -198,5 +198,5 @@ def sort_data_all_conferences():
 			values_lines[r].participants,
 			values_lines[r].result,]	
 		table.append(x)
-	result_table = filters_hobbies(table)
+	result_table = filters_conferences(table)
 	return json.dumps(result_table)
