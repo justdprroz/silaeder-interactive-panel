@@ -6,5 +6,6 @@ urlpatterns = [
     path('achievements/', views.achievements, name='achievements'),
     path('getachievements/', views.getachievements, name='getachievements'),
     path('gethobbies/', views.gethobbies, name='gethobbies'),
-    path('getachievements/getconferences/', views.getconferences, name='getconferences')
+    path('getachievements/getconferences/', views.getconferences, name='getconferences'),
+    path('getachievements/getinternships/', views.getinternships, name='getinternships')
 ]

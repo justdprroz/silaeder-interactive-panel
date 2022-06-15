@@ -21,6 +21,11 @@ def gethobbies(request):
 		
 	return HttpResponse(output, content_type="application/json")
 
+def getinternships(request):
+	output = "{}".format(sort_data_all_internships())
+		
+	return HttpResponse(output, content_type="application/json")
+
 def getachievements(request):
 	if request.GET.get("subject", "") != '':
 		name_subject = request.GET.get("subject", "")
@@ -200,3 +205,15 @@ def sort_data_all_conferences():
 		table.append(x)
 	result_table = filters_conferences(table)
 	return json.dumps(result_table)
+
+def sort_data_all_internships():
+	table = []
+	values_lines = models.Internships.objects.all()
+	for r in range(len(values_lines)):
+		x = [
+			values_lines[r].date,
+			values_lines[r].place,
+			values_lines[r].feedback,
+			values_lines[r].participant,]	
+		table.append(x)
+	return json.dumps([table])
