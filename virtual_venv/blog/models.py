@@ -143,6 +143,17 @@ class Hobbies(models.Model):
         db_table = 'hobbies'
 
 
+class Internships(models.Model):
+    date = models.TextField(db_column='Date', blank=True, null=True)  # Field name made lowercase.
+    place = models.TextField(db_column='Place', blank=True, null=True)  # Field name made lowercase.
+    feedback = models.TextField(db_column='Feedback', blank=True, null=True)  # Field name made lowercase.
+    participant = models.TextField(db_column='Participant', blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'internships'
+
+
 class Olympiads(models.Model):
     date = models.TextField(db_column='Date', blank=True, null=True)  # Field name made lowercase.
     event = models.TextField(db_column='Event', blank=True, null=True)  # Field name made lowercase.
