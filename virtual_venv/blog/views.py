@@ -208,6 +208,7 @@ def sort_data_all_conferences():
 
 def sort_data_all_internships():
 	table = []
+	result_table = []
 	values_lines = models.Internships.objects.all()
 	for r in range(len(values_lines)):
 		x = [
@@ -216,4 +217,6 @@ def sort_data_all_internships():
 			values_lines[r].feedback,
 			values_lines[r].participant,]	
 		table.append(x)
-	return json.dumps([table])
+	result_table.append(table)
+	result_table.append({})
+	return json.dumps(result_table)
