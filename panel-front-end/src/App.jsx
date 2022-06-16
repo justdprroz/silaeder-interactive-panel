@@ -11,12 +11,16 @@ import { onMount, createSignal, onCleanup, Show, For } from "solid-js";
 const api_url = "http://localhost:8000"
 
 const [getAchievements, setAchievements] = createSignal([]);
+const [getConferences, setConferences] = createSignal([]);
+const [getInternships, setInternships] = createSignal([]);
+
 const [getClubs, setClubs] = createSignal([]);
+
 const [getFilters, setFilters] = createSignal([]);
 
-function ReturnMenu() {
+function ReturnMenu(props) {
     return (
-        <Link href='/'>
+        <Link href={props.path}>
             <button type="button" class="fs-1 text-white btn position-absolute top-0 start-0" style="background-color:#c45a8f; margin: 5px">
                 Назад
             </button>
@@ -130,7 +134,7 @@ function AllFilters(props) {
 
 function AchievementCard(props) {
     return(
-        <div style="background-color:#c45a8f; margin:10px; height:25vh; width:25vw; padding: 10px" class="rounded">
+        <div style="background-color:#c45a8f; margin:10px; height:100%; width:25vw; padding: 10px" class="rounded">
             <div class="d-flex justify-content-start">
                 <div style="height: 100px; width: 100px; background: #888888">
                 </div>
@@ -147,9 +151,46 @@ function AchievementCard(props) {
     )
 }
 
+function ConferenceCard(props) {
+    return(
+        <div style="background-color:#c45a8f; margin:10px; height: 100%; width:25vw; padding: 10px" class="rounded">
+            <div class="d-flex justify-content-start">
+                <div style="height: 100px; width: 100px; background: #888888">
+                </div>
+                <div style="margin:10px">
+                    Событие: {props.conference[1]}<br/>
+                    Предмет: {props.conference[5]}<br/>
+                </div>
+            </div>
+            <div>
+                Участники: {props.conference[6]}<br/>
+                Награда: {props.conference[7]}<br/>
+            </div>
+        </div>
+    )
+}
+
+function InternshipCard(props) {
+    return(
+        <div style="background-color:#c45a8f; margin:10px; height: 100%; width:25vw; padding: 10px" class="rounded">
+            <div class="d-flex justify-content-start">
+                <div style="height: 100px; width: 100px; background: #888888">
+                </div>
+                <div style="margin:10px">
+                    Компания: {props.internship[1]}<br/>
+                    Участник: {props.internship[3]}<br/>
+                </div>
+            </div>
+            <div>
+                Описание: {props.internship[2]}<br/>
+            </div>
+        </div>
+    )
+}
+
 function ClubCard(props) {
     return(
-        <div style="background-color:#c45a8f; margin:10px; height:25vh; width:25vw; padding: 10px" class="rounded">
+        <div style="background-color:#c45a8f; margin:10px; height:100%; width:25vw; padding: 10px" class="rounded">
             <div class="d-flex justify-content-start">
                 <div style="height: 100px; width: 100px; background: #888888">
                 </div>
@@ -205,26 +246,24 @@ function Achievements() {
         console.log("achievements mounted");
     })
     return (
-        <div class="h-100 container" style="font-family: 'efourpro'">
-            <div class="row">
-                <header>
-                    <ReturnMenu/>
-                    <AllFilters setter={setAchievements} path="achievements"/>
-                </header>
-            </div>
-            <div class="row" style="font-family: 'Roboto', sans-serif;">
-                <div class="container w-75">
-                    <div class="row row-cols-2">
-                        <For each={getAchievements()}>{(achievement, _i) =>
-                        <>
-                            <div class="col h-25">
-                                <AchievementCard achievement={achievement}/>
-                            </div>
-                            <Show when={_i() % 2 == 1}>
-                                <div class="w-100"></div>
-                            </Show>
-                        </>
-                        }</For>
+        <div class="h-100" style="font-family: 'efourpro'">
+            <ReturnMenu path="/" />
+            <div class="container text-white h-100">
+                <div class="row h-50">
+                    <div class="col-sm d-flex justify-content-center align-items-center">
+                        <Link href="/olympiads" class="w-75 h-50">
+                            <button type="button" class="fs-1 text-white btn w-100 h-100" style="background-color:#c45a8f">Олимпиады</button>
+                        </Link>
+                    </div>
+                    <div class="col-sm d-flex justify-content-center align-items-center">
+                        <Link href="/conferences" class="w-75 h-50">
+                            <button type="button" class="fs-1 text-white btn w-100 h-100" style="background-color:#c45a8f">Конференции</button>
+                        </Link>
+                    </div>
+                    <div class="col-sm d-flex justify-content-center align-items-center">
+                        <Link href="/internships" class="w-75 h-50">
+                            <button type="button" class="fs-1 text-white btn w-100 h-100" style="background-color:#c45a8f">Стажировки </button>
+                        </Link>
                     </div>
                 </div>
             </div>
@@ -241,7 +280,7 @@ function Clubs() {
         <div class="h-100" style="font-family: 'efourpro'">
             <div class="row">
                 <header>
-                    <ReturnMenu/>
+                    <ReturnMenu path="/"/>
                     <AllFilters setter={setClubs} path="hobbies"/>
                 </header>
             </div>
@@ -265,10 +304,109 @@ function Clubs() {
     )
 }
 
+function Olympiads() {
+    onMount(() => {
+        requestData(setAchievements, "achievements")
+        console.log("Olympiads mounted");
+    })
+    return (
+        <div class="h-100 container" style="font-family: 'efourpro'">
+            <div class="row">
+                <header>
+                    <ReturnMenu path="/achievements"/>
+                    <AllFilters setter={setAchievements} path="achievements"/>
+                </header>
+            </div>
+            <div class="row" style="font-family: 'Roboto', sans-serif;">
+                <div class="container w-75">
+                    <div class="row row-cols-2">
+                        <For each={getAchievements()}>{(achievement, _i) =>
+                        <>
+                            <div class="col h-25">
+                                <AchievementCard achievement={achievement}/>
+                            </div>
+                            <Show when={_i() % 2 == 1}>
+                                <div class="w-100"></div>
+                            </Show>
+                        </>
+                        }</For>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+function Conferences() {
+    onMount(() => {
+        requestData(setConferences, "conferences")
+        console.log("conferences mounted");
+    })
+    return (
+        <div class="h-100" style="font-family: 'efourpro'">
+            <div class="row">
+                <header>
+                    <ReturnMenu path="/achievements"/>
+                    <AllFilters setter={setConferences} path="conferences"/>
+                </header>
+            </div>
+            <div class="row" style="font-family: 'Roboto', sans-serif; margin:0px">
+                <div class="container w-75">
+                    <div class="row row-cols-2">
+                        <For each={getConferences()}>{(conference, _i) =>
+                        <>
+                            <div class="col h-25">
+                                <ConferenceCard conference={conference}/>
+                            </div>
+                            <Show when={_i() % 2 == 1}>
+                                <div class="w-100"></div>
+                            </Show>
+                        </>
+                        }</For>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+function Internships() {
+    onMount(() => {
+        requestData(setInternships, "internships")
+        console.log("Internships mounted");
+    })
+    return (
+        <div class="h-100" style="font-family: 'efourpro'">
+            <div class="row">
+                <header>
+                    <ReturnMenu path="/achievements"/>
+                    <AllFilters setter={setInternships} path="internships"/>
+                </header>
+            </div>
+            <div class="row" style="font-family: 'Roboto', sans-serif; margin:0px">
+                <div class="container w-75">
+                    <div class="row row-cols-2">
+                        <For each={getInternships()}>{(internship, _i) =>
+                        <>
+                            <div class="col h-25">
+                                <InternshipCard internship={internship}/>
+                            </div>
+                            <Show when={_i() % 2 == 1}>
+                                <div class="w-100"></div>
+                            </Show>
+                        </>
+                        }</For>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
 function Plan() {
     return (
         <div class="h-100" style="font-family: 'efourpro'">
-            <ReturnMenu/>
+            <ReturnMenu path="/" />
             <img src={plan1} class="w-100" />
             <img src={plan2} class="w-100" />
             <img src={plan4} class="w-100" />
@@ -280,7 +418,7 @@ function Plan() {
 function Facts() {
     return (
         <div class="h-100" style="font-family: 'efourpro'">
-            <ReturnMenu/>
+            <ReturnMenu path="/" />
             <h1 class="text-white h-100 d-flex justify-content-center align-items-center" style="font-family: 'efourpro'">
                 Facts WIP
             </h1>
@@ -293,6 +431,9 @@ function App() {
         <Routes>
             <Route path="/" element={<MainMenu/>} />
             <Route path="/achievements" element={<Achievements/>} />
+            <Route path="/olympiads" element={<Olympiads/>} />
+            <Route path="/conferences" element={<Conferences/>} />
+            <Route path="/internships" element={<Internships/>} />
             <Route path="/plan" element={<Plan/>} />
             <Route path="/clubs" element={<Clubs/> } />
             <Route path="/facts" element={<Facts/> } />
