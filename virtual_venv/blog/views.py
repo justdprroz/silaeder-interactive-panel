@@ -128,9 +128,14 @@ def sort_data_conferences(title, objects: str): # name_base - название �
 			values_lines = models.Conferences.objects.filter(level=i)
 		for r in range(len(values_lines)):
 			x = [
+			values_lines[r].date,
 			values_lines[r].event,
+			values_lines[r].class_field,
+			values_lines[r].head_teacher,
 			values_lines[r].level,
-			values_lines[r].subject,]
+			values_lines[r].subject,
+			values_lines[r].participants,
+			values_lines[r].result,]
 			table.append(x)
 	result_table = filters_conferences(table)
 	return json.dumps(result_table)
