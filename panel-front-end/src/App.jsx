@@ -1,4 +1,10 @@
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+
+import plan1 from "./assets/1.jpg";
+import plan2 from "./assets/2.jpg";
+import plan4 from "./assets/4.jpg";
+import plan5 from "./assets/5.jpg";
+
 import { Routes, Route, Link } from "solid-app-router";
 import { onMount, createSignal, onCleanup, Show, For } from "solid-js";
 
@@ -263,7 +269,10 @@ function Plan() {
     return (
         <div class="h-100" style="font-family: 'efourpro'">
             <ReturnMenu/>
-            <img src="./assets/1.jpg" />
+            <img src={plan1} class="w-100" />
+            <img src={plan2} class="w-100" />
+            <img src={plan4} class="w-100" />
+            <img src={plan5} class="w-100" />
         </div>
     )
 }
