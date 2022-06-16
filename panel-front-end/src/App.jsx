@@ -242,8 +242,11 @@ function MainMenu() {
 
 function Achievements() {
     onMount(() => {
-        requestData(setAchievements, "achievements")
+        // requestData(setAchievements, "achievements")
         console.log("achievements mounted");
+    })
+    onCleanup(() => {
+        setFilters([]);
     })
     return (
         <div class="h-100" style="font-family: 'efourpro'">
