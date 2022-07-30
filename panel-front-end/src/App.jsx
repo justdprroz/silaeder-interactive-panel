@@ -5,6 +5,8 @@ import plan2 from "./assets/2.jpg";
 import plan4 from "./assets/4.jpg";
 import plan5 from "./assets/5.jpg";
 
+const plan = [plan1, plan2, "", plan4, plan5]
+
 import { Routes, Route, Link } from "solid-app-router";
 import { onMount, createSignal, onCleanup, Show, For } from "solid-js";
 
@@ -18,10 +20,12 @@ const [getClubs, setClubs] = createSignal([]);
 
 const [getFilters, setFilters] = createSignal([]);
 
+const [getplanindex, setplanindex] = createSignal(1);
+
 function ReturnMenu(props) {
     return (
         <Link href={props.path}>
-            <button type="button" class="fs-1 text-white btn position-absolute top-0 start-0" style="background-color:#c45a8f; margin: 5px">
+            <button type="button" class="fs-1 text-white btn position-absolute top-0 start-0" style="background-color:#b1b34d; margin: 5px">
                 Назад
             </button>
         </Link>
@@ -98,7 +102,7 @@ function Filter(props) {
     
     return (
         <div id={category + "-list"} class="filter-list dropdown-check-list align-top" style="margin: 5px">
-            <button id={category} type="button" class="anchor fs-1 text-white btn" style="background-color:#c45a8f">
+            <button id={category} type="button" class="anchor fs-1 text-white btn" style="background-color:#b1b34d">
                 <span>{category}</span>
             </button>
             <ul class="items">
@@ -134,7 +138,7 @@ function AllFilters(props) {
 
 function AchievementCard(props) {
     return(
-        <div style="background-color:#c45a8f; margin:10px; height:100%; width:25vw; padding: 10px" class="rounded">
+        <div style="background-color:#b1b34d; margin:10px; height:100%; width:25vw; padding: 10px" class="rounded">
             <div class="d-flex justify-content-start">
                 <div style="height: 100px; width: 100px; background: #888888">
                 </div>
@@ -153,7 +157,7 @@ function AchievementCard(props) {
 
 function ConferenceCard(props) {
     return(
-        <div style="background-color:#c45a8f; margin:10px; height: 100%; width:25vw; padding: 10px" class="rounded">
+        <div style="background-color:#b1b34d; margin:10px; height: 100%; width:25vw; padding: 10px" class="rounded">
             <div class="d-flex justify-content-start">
                 <div style="height: 100px; width: 100px; background: #888888">
                 </div>
@@ -172,7 +176,7 @@ function ConferenceCard(props) {
 
 function InternshipCard(props) {
     return(
-        <div style="background-color:#c45a8f; margin:10px; height: 100%; width:25vw; padding: 10px" class="rounded">
+        <div style="background-color:#b1b34d; margin:10px; height: 100%; width:25vw; padding: 10px" class="rounded">
             <div class="d-flex justify-content-start">
                 <div style="height: 100px; width: 100px; background: #888888">
                 </div>
@@ -190,7 +194,7 @@ function InternshipCard(props) {
 
 function ClubCard(props) {
     return(
-        <div style="background-color:#c45a8f; margin:10px; height:100%; width:25vw; padding: 10px" class="rounded">
+        <div style="background-color:#b1b34d; margin:10px; height:100%; width:25vw; padding: 10px" class="rounded">
             <div class="d-flex justify-content-start">
                 <div style="height: 100px; width: 100px; background: #888888">
                 </div>
@@ -214,24 +218,24 @@ function MainMenu() {
                 <div class="row h-50">
                     <div class="col-sm d-flex justify-content-center align-items-center">
                         <Link href="/plan" class="w-75 h-50">
-                            <button type="button" class="fs-1 text-white btn w-100 h-100" style="background-color:#c45a8f">структура школы</button>
+                            <button type="button" class="fs-1 text-white btn w-100 h-100" style="background-color:#b1b34d">структура школы</button>
                         </Link>
                     </div>
                     <div class="col-sm d-flex justify-content-center align-items-center">
                         <Link href="/achievements" class="w-75 h-50">
-                            <button type="button" class="fs-1 text-white btn w-100 h-100" style="background-color:#c45a8f">достижения</button>
+                            <button type="button" class="fs-1 text-white btn w-100 h-100" style="background-color:#b1b34d">достижения</button>
                         </Link>
                     </div>
                 </div>
                 <div class="row h-50">
                     <div class="col-sm d-flex justify-content-center align-items-center">
                         <Link href="/clubs" class="w-75 h-50">
-                            <button type="button" class="fs-1 text-white btn w-100 h-100" style="background-color:#c45a8f">кружки</button>
+                            <button type="button" class="fs-1 text-white btn w-100 h-100" style="background-color:#b1b34d">кружки</button>
                         </Link>
                     </div>
                     <div class="col-sm d-flex justify-content-center align-items-center">
                         <Link href="/facts" class="w-75 h-50">
-                            <button type="button" class="fs-1 text-white btn w-100 h-100" style="background-color:#c45a8f">факты</button>
+                            <button type="button" class="fs-1 text-white btn w-100 h-100" style="background-color:#b1b34d">факты</button>
                         </Link>
                     </div>
                 </div>
@@ -255,17 +259,17 @@ function Achievements() {
                 <div class="row h-50">
                     <div class="col-sm d-flex justify-content-center align-items-center">
                         <Link href="/olympiads" class="w-75 h-50">
-                            <button type="button" class="fs-1 text-white btn w-100 h-100" style="background-color:#c45a8f">Олимпиады</button>
+                            <button type="button" class="fs-1 text-white btn w-100 h-100" style="background-color:#b1b34d">Олимпиады</button>
                         </Link>
                     </div>
                     <div class="col-sm d-flex justify-content-center align-items-center">
                         <Link href="/conferences" class="w-75 h-50">
-                            <button type="button" class="fs-1 text-white btn w-100 h-100" style="background-color:#c45a8f">Конференции</button>
+                            <button type="button" class="fs-1 text-white btn w-100 h-100" style="background-color:#b1b34d">Конференции</button>
                         </Link>
                     </div>
                     <div class="col-sm d-flex justify-content-center align-items-center">
                         <Link href="/internships" class="w-75 h-50">
-                            <button type="button" class="fs-1 text-white btn w-100 h-100" style="background-color:#c45a8f">Стажировки </button>
+                            <button type="button" class="fs-1 text-white btn w-100 h-100" style="background-color:#b1b34d">Стажировки </button>
                         </Link>
                     </div>
                 </div>
@@ -410,10 +414,21 @@ function Plan() {
     return (
         <div class="h-100" style="font-family: 'efourpro'">
             <ReturnMenu path="/" />
-            <img src={plan1} class="w-100" />
-            <img src={plan2} class="w-100" />
-            <img src={plan4} class="w-100" />
-            <img src={plan5} class="w-100" />
+            <div class="position-absolute top-0 end-0">
+                <button type="button" class="fs-1 text-white btn" onclick={() => setplanindex(1)} style="background-color:#b1b34d; margin: 5px">
+                    1
+                </button>
+                <button type="button" class="fs-1 text-white btn" onclick={() => setplanindex(2)} style="background-color:#b1b34d; margin: 5px">
+                    2
+                </button>
+                <button type="button" class="fs-1 text-white btn" onclick={() => setplanindex(4)} style="background-color:#b1b34d; margin: 5px">
+                    4
+                </button>
+                <button type="button" class="fs-1 text-white btn" onclick={() => setplanindex(5)} style="background-color:#b1b34d; margin: 5px">
+                    5
+                </button>
+            </div>
+            <img src={plan[getplanindex() - 1]} class="w-100" />
         </div>
     )
 }
