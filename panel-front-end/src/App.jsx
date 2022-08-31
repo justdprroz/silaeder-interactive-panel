@@ -5,6 +5,8 @@ import plan2 from "./assets/2.jpg";
 import plan4 from "./assets/4.jpg";
 import plan5 from "./assets/5.jpg";
 
+const plan = [plan1, plan2, "", plan4, plan5]
+
 import { Routes, Route, Link } from "solid-app-router";
 import { onMount, createSignal, onCleanup, Show, For } from "solid-js";
 
@@ -18,10 +20,12 @@ const [getClubs, setClubs] = createSignal([]);
 
 const [getFilters, setFilters] = createSignal([]);
 
+const [getplanindex, setplanindex] = createSignal(1);
+
 function ReturnMenu(props) {
     return (
         <Link href={props.path}>
-            <button type="button" class="fs-1 text-white btn position-absolute top-0 start-0" style="background-color:#c45a8f; margin: 5px">
+            <button type="button" class="fs-1 text-white btn position-absolute top-0 start-0" style="background-color:#b1b34d; margin: 5px">
                 Назад
             </button>
         </Link>
@@ -32,17 +36,17 @@ function requestData(setter, path) {
     console.log("making request");
     const filters = document.getElementsByClassName("filter-list");
     const filter_data = {};
-    for(let i = 0; i < filters.length; i++) {
+    for (let i = 0; i < filters.length; i++) {
         filter_data[filters[i].children[0].id] = "";
         const selections = filters[i].getElementsByClassName("selection-value");
         const selected = [];
-        for(let j = 0; j < selections.length; j++) {
-            if(selections[j].checked == true) {
+        for (let j = 0; j < selections.length; j++) {
+            if (selections[j].checked == true) {
                 selected.push(selections[j].id);
             }
         }
-        for(let j = 0; j < selected.length; j++) {
-            if(j != selected.length - 1) {
+        for (let j = 0; j < selected.length; j++) {
+            if (j != selected.length - 1) {
                 filter_data[filters[i].children[0].id] += selected[j] + ","
             } else {
                 filter_data[filters[i].children[0].id] += selected[j]
@@ -56,7 +60,7 @@ function requestData(setter, path) {
         params += item[0] + "=" + item[1] + "&"
     })
     let dataReq = new XMLHttpRequest();
-    dataReq.onreadystatechange = function() {
+    dataReq.onreadystatechange = function () {
         if (dataReq.readyState === 4) {
             setter(JSON.parse(dataReq.response)[0]);
             setFilters(JSON.parse(dataReq.response)[1]);
@@ -73,18 +77,18 @@ function Filter(props) {
     let listener;
     onMount(() => {
         let checkList = document.getElementById(category + '-list');
-        checkList.getElementsByClassName('anchor')[0].onclick = function(evt) {
-            if (checkList.classList.contains('visible')){
+        checkList.getElementsByClassName('anchor')[0].onclick = function (evt) {
+            if (checkList.classList.contains('visible')) {
                 checkList.classList.remove('visible');
             } else {
                 checkList.classList.add('visible');
             }
         }
 
-        listener = function(evt) {
+        listener = function (evt) {
             if (!document.getElementById(category + "-list").contains(evt.target)) {
                 if (checkList.classList.contains('visible'))
-                checkList.classList.remove('visible');
+                    checkList.classList.remove('visible');
             }
         };
 
@@ -95,17 +99,17 @@ function Filter(props) {
     onCleanup(() => {
         document.removeEventListener("click", listener);
     })
-    
+
     return (
         <div id={category + "-list"} class="filter-list dropdown-check-list align-top" style="margin: 5px">
-            <button id={category} type="button" class="anchor fs-1 text-white btn" style="background-color:#c45a8f">
+            <button id={category} type="button" class="anchor fs-1 text-white btn" style="background-color:#b1b34d">
                 <span>{category}</span>
             </button>
             <ul class="items">
                 <For each={selections}>{(selection, _i) =>
                     <li>
                         <button type="button" class="selection-button fs-3 text-white btn w-100 d-flex justify-content-left" style="padding: 0px">
-                            <input id={selection} type="checkbox" class="selection-value" onclick={() => requestData(props.setter, props.path)}/>
+                            <input id={selection} type="checkbox" class="selection-value" onclick={() => requestData(props.setter, props.path)} />
                             <label for={selection} class="w-100 h-100 d-flex justify-content-left">
                                 {selection}
                             </label>
@@ -120,7 +124,7 @@ function Filter(props) {
 function AllFilters(props) {
     return (
         <div id="filters" class="position-absolute top-0 end-0">
-            <For each={Object.keys(getFilters())}>{(filter, _i) => 
+            <For each={Object.keys(getFilters())}>{(filter, _i) =>
                 <Filter
                     category={filter}
                     selections={getFilters()[filter]}
@@ -133,71 +137,71 @@ function AllFilters(props) {
 }
 
 function AchievementCard(props) {
-    return(
-        <div style="background-color:#c45a8f; margin:10px; height:100%; width:25vw; padding: 10px" class="rounded">
+    return (
+        <div style="background-color:#b1b34d; margin:10px; height:100%; width:25vw; padding: 10px" class="rounded">
             <div class="d-flex justify-content-start">
                 <div style="height: 100px; width: 100px; background: #888888">
                 </div>
                 <div style="margin:10px">
-                    Событие: {props.achievement[1]}<br/>
-                    Предмет: {props.achievement[5]}<br/>
+                    Событие: {props.achievement[1]}<br />
+                    Предмет: {props.achievement[5]}<br />
                 </div>
             </div>
             <div>
-                Участники: {props.achievement[6]}<br/>
-                Награда: {props.achievement[7]}<br/>
+                Участники: {props.achievement[6]}<br />
+                Награда: {props.achievement[7]}<br />
             </div>
         </div>
     )
 }
 
 function ConferenceCard(props) {
-    return(
-        <div style="background-color:#c45a8f; margin:10px; height: 100%; width:25vw; padding: 10px" class="rounded">
+    return (
+        <div style="background-color:#b1b34d; margin:10px; height: 100%; width:25vw; padding: 10px" class="rounded">
             <div class="d-flex justify-content-start">
                 <div style="height: 100px; width: 100px; background: #888888">
                 </div>
                 <div style="margin:10px">
-                    Событие: {props.conference[1]}<br/>
-                    Предмет: {props.conference[5]}<br/>
+                    Событие: {props.conference[1]}<br />
+                    Предмет: {props.conference[5]}<br />
                 </div>
             </div>
             <div>
-                Участники: {props.conference[6]}<br/>
-                Награда: {props.conference[7]}<br/>
+                Участники: {props.conference[6]}<br />
+                Награда: {props.conference[7]}<br />
             </div>
         </div>
     )
 }
 
 function InternshipCard(props) {
-    return(
-        <div style="background-color:#c45a8f; margin:10px; height: 100%; width:25vw; padding: 10px" class="rounded">
+    return (
+        <div style="background-color:#b1b34d; margin:10px; height: 100%; width:25vw; padding: 10px" class="rounded">
             <div class="d-flex justify-content-start">
                 <div style="height: 100px; width: 100px; background: #888888">
                 </div>
                 <div style="margin:10px">
-                    Компания: {props.internship[1]}<br/>
-                    Участник: {props.internship[3]}<br/>
+                    Компания: {props.internship[1]}<br />
+                    Участник: {props.internship[3]}<br />
                 </div>
             </div>
             <div>
-                Описание: {props.internship[2]}<br/>
+                Описание: {props.internship[2]}<br />
             </div>
         </div>
     )
 }
 
 function ClubCard(props) {
-    return(
-        <div style="background-color:#c45a8f; margin:10px; height:100%; width:25vw; padding: 10px" class="rounded">
+    return (
+        <div style="background-color:#b1b34d; margin:10px; height:100%; width:25vw; padding: 10px" class="rounded">
             <div class="d-flex justify-content-start">
                 <div style="height: 100px; width: 100px; background: #888888">
                 </div>
                 <div style="margin:10px">
-                    Кружок: {props.club[0]}<br/>
-                    Ведущий: {props.club[1]}<br/>
-                    Категория: {props.club[2]}<br/>
+                    Кружок: {props.club[0]}<br />
+                    Ведущий: {props.club[1]}<br />
+                    Категория: {props.club[2]}<br />
                 </div>
             </div>
         </div>
@@ -214,24 +218,24 @@ function MainMenu() {
                 <div class="row h-50">
                     <div class="col-sm d-flex justify-content-center align-items-center">
                         <Link href="/plan" class="w-75 h-50">
-                            <button type="button" class="fs-1 text-white btn w-100 h-100" style="background-color:#c45a8f">структура школы</button>
+                            <button type="button" class="fs-1 text-white btn w-100 h-100" style="background-color:#b1b34d">структура школы</button>
                         </Link>
                     </div>
                     <div class="col-sm d-flex justify-content-center align-items-center">
                         <Link href="/achievements" class="w-75 h-50">
-                            <button type="button" class="fs-1 text-white btn w-100 h-100" style="background-color:#c45a8f">достижения</button>
+                            <button type="button" class="fs-1 text-white btn w-100 h-100" style="background-color:#b1b34d">достижения</button>
                         </Link>
                     </div>
                 </div>
                 <div class="row h-50">
                     <div class="col-sm d-flex justify-content-center align-items-center">
                         <Link href="/clubs" class="w-75 h-50">
-                            <button type="button" class="fs-1 text-white btn w-100 h-100" style="background-color:#c45a8f">кружки</button>
+                            <button type="button" class="fs-1 text-white btn w-100 h-100" style="background-color:#b1b34d">кружки</button>
                         </Link>
                     </div>
                     <div class="col-sm d-flex justify-content-center align-items-center">
                         <Link href="/facts" class="w-75 h-50">
-                            <button type="button" class="fs-1 text-white btn w-100 h-100" style="background-color:#c45a8f">факты</button>
+                            <button type="button" class="fs-1 text-white btn w-100 h-100" style="background-color:#b1b34d">факты</button>
                         </Link>
                     </div>
                 </div>
@@ -255,17 +259,17 @@ function Achievements() {
                 <div class="row h-50">
                     <div class="col-sm d-flex justify-content-center align-items-center">
                         <Link href="/olympiads" class="w-75 h-50">
-                            <button type="button" class="fs-1 text-white btn w-100 h-100" style="background-color:#c45a8f">Олимпиады</button>
+                            <button type="button" class="fs-1 text-white btn w-100 h-100" style="background-color:#b1b34d">Олимпиады</button>
                         </Link>
                     </div>
                     <div class="col-sm d-flex justify-content-center align-items-center">
                         <Link href="/conferences" class="w-75 h-50">
-                            <button type="button" class="fs-1 text-white btn w-100 h-100" style="background-color:#c45a8f">Конференции</button>
+                            <button type="button" class="fs-1 text-white btn w-100 h-100" style="background-color:#b1b34d">Конференции</button>
                         </Link>
                     </div>
                     <div class="col-sm d-flex justify-content-center align-items-center">
                         <Link href="/internships" class="w-75 h-50">
-                            <button type="button" class="fs-1 text-white btn w-100 h-100" style="background-color:#c45a8f">Стажировки </button>
+                            <button type="button" class="fs-1 text-white btn w-100 h-100" style="background-color:#b1b34d">Стажировки </button>
                         </Link>
                     </div>
                 </div>
@@ -280,25 +284,29 @@ function Clubs() {
         console.log("clubs mounted");
     })
     return (
-        <div class="h-100" style="font-family: 'efourpro'">
-            <div class="row">
-                <header>
-                    <ReturnMenu path="/"/>
-                    <AllFilters setter={setClubs} path="hobbies"/>
-                </header>
+        <div class="h-100 d-flex flex-column" style="font-family: 'efourpro'">
+            <div class="p-2" style="margin-bottom:50px">
+                <div class="d-flex flex-column">
+                    <div class="p-2">
+                        <ReturnMenu path="/" />
+                    </div>
+                    <div class="p-2">
+                        <AllFilters setter={setClubs} path="hobbies" />
+                    </div>
+                </div>
             </div>
-            <div class="row" style="font-family: 'Roboto', sans-serif; margin:0px">
+            <div class="p-2" style="font-family: 'Roboto', sans-serif; margin:0px">
                 <div class="container w-75">
                     <div class="row row-cols-2">
                         <For each={getClubs()}>{(club, _i) =>
-                        <>
-                            <div class="col h-25">
-                                <ClubCard club={club}/>
-                            </div>
-                            <Show when={_i() % 2 == 1}>
-                                <div class="w-100"></div>
-                            </Show>
-                        </>
+                            <>
+                                <div class="col h-25">
+                                    <ClubCard club={club} />
+                                </div>
+                                <Show when={_i() % 2 == 1}>
+                                    <div class="w-100"></div>
+                                </Show>
+                            </>
                         }</For>
                     </div>
                 </div>
@@ -313,25 +321,29 @@ function Olympiads() {
         console.log("Olympiads mounted");
     })
     return (
-        <div class="h-100 container" style="font-family: 'efourpro'">
-            <div class="row">
-                <header>
-                    <ReturnMenu path="/achievements"/>
-                    <AllFilters setter={setAchievements} path="achievements"/>
-                </header>
+        <div class="h-100 container d-flex flex-column" style="font-family: 'efourpro'">
+            <div class="p-2" style="margin-bottom:50px">
+                <div class="d-flex flex-column">
+                    <div class="p-2">
+                        <ReturnMenu path="/achievements" />
+                    </div>
+                    <div class="p-2">
+                        <AllFilters setter={setAchievements} path="achievements" />
+                    </div>
+                </div>
             </div>
-            <div class="row" style="font-family: 'Roboto', sans-serif;">
+            <div class="row p-2" style="font-family: 'Roboto', sans-serif;">
                 <div class="container w-75">
                     <div class="row row-cols-2">
                         <For each={getAchievements()}>{(achievement, _i) =>
-                        <>
-                            <div class="col h-25">
-                                <AchievementCard achievement={achievement}/>
-                            </div>
-                            <Show when={_i() % 2 == 1}>
-                                <div class="w-100"></div>
-                            </Show>
-                        </>
+                            <>
+                                <div class="col h-25">
+                                    <AchievementCard achievement={achievement} />
+                                </div>
+                                <Show when={_i() % 2 == 1}>
+                                    <div class="w-100"></div>
+                                </Show>
+                            </>
                         }</For>
                     </div>
                 </div>
@@ -346,25 +358,29 @@ function Conferences() {
         console.log("conferences mounted");
     })
     return (
-        <div class="h-100" style="font-family: 'efourpro'">
-            <div class="row">
-                <header>
-                    <ReturnMenu path="/achievements"/>
-                    <AllFilters setter={setConferences} path="conferences"/>
-                </header>
+        <div class="h-100 d-flex flex-column" style="font-family: 'efourpro'">
+            <div class="p-2" style="margin-bottom:50px">
+                <div class="d-flex flex-column">
+                    <div class="p-2">
+                        <ReturnMenu path="/achievements" />
+                    </div>
+                    <div class="p-2">
+                        <AllFilters setter={setConferences} path="conferences" />
+                    </div>
+                </div>
             </div>
-            <div class="row" style="font-family: 'Roboto', sans-serif; margin:0px">
+            <div class="p-2" style="font-family: 'Roboto', sans-serif; margin:0px">
                 <div class="container w-75">
                     <div class="row row-cols-2">
                         <For each={getConferences()}>{(conference, _i) =>
-                        <>
-                            <div class="col h-25">
-                                <ConferenceCard conference={conference}/>
-                            </div>
-                            <Show when={_i() % 2 == 1}>
-                                <div class="w-100"></div>
-                            </Show>
-                        </>
+                            <>
+                                <div class="col h-25">
+                                    <ConferenceCard conference={conference} />
+                                </div>
+                                <Show when={_i() % 2 == 1}>
+                                    <div class="w-100"></div>
+                                </Show>
+                            </>
                         }</For>
                     </div>
                 </div>
@@ -381,23 +397,23 @@ function Internships() {
     return (
         <div class="h-100" style="font-family: 'efourpro'">
             <div class="row">
-                <header>
-                    <ReturnMenu path="/achievements"/>
-                    <AllFilters setter={setInternships} path="internships"/>
-                </header>
+                <div>
+                    <ReturnMenu path="/achievements" />
+                    <AllFilters setter={setInternships} path="internships" />
+                </div>
             </div>
             <div class="row" style="font-family: 'Roboto', sans-serif; margin:0px">
                 <div class="container w-75">
                     <div class="row row-cols-2">
                         <For each={getInternships()}>{(internship, _i) =>
-                        <>
-                            <div class="col h-25">
-                                <InternshipCard internship={internship}/>
-                            </div>
-                            <Show when={_i() % 2 == 1}>
-                                <div class="w-100"></div>
-                            </Show>
-                        </>
+                            <>
+                                <div class="col h-25">
+                                    <InternshipCard internship={internship} />
+                                </div>
+                                <Show when={_i() % 2 == 1}>
+                                    <div class="w-100"></div>
+                                </Show>
+                            </>
                         }</For>
                     </div>
                 </div>
@@ -408,12 +424,25 @@ function Internships() {
 
 function Plan() {
     return (
-        <div class="h-100" style="font-family: 'efourpro'">
-            <ReturnMenu path="/" />
-            <img src={plan1} class="w-100" />
-            <img src={plan2} class="w-100" />
-            <img src={plan4} class="w-100" />
-            <img src={plan5} class="w-100" />
+        <div class="h-100 d-flex flex-column" style="font-family: 'efourpro'">
+            <div class="p-2" style="margin-bottom:60px">
+                <ReturnMenu path="/" />
+                <div class="position-absolute top-0 end-0">
+                    <button type="button" class="fs-1 text-white btn" onclick={() => setplanindex(1)} style="background-color:#b1b34d; margin: 5px">
+                        1
+                    </button>
+                    <button type="button" class="fs-1 text-white btn" onclick={() => setplanindex(2)} style="background-color:#b1b34d; margin: 5px">
+                        2
+                    </button>
+                    <button type="button" class="fs-1 text-white btn" onclick={() => setplanindex(4)} style="background-color:#b1b34d; margin: 5px">
+                        4
+                    </button>
+                    <button type="button" class="fs-1 text-white btn" onclick={() => setplanindex(5)} style="background-color:#b1b34d; margin: 5px">
+                        5
+                    </button>
+                </div>
+            </div>
+            <img src={plan[getplanindex() - 1]} class="w-100 p-2" />
         </div>
     )
 }
@@ -432,14 +461,14 @@ function Facts() {
 function App() {
     return (
         <Routes>
-            <Route path="/" element={<MainMenu/>} />
-            <Route path="/achievements" element={<Achievements/>} />
-            <Route path="/olympiads" element={<Olympiads/>} />
-            <Route path="/conferences" element={<Conferences/>} />
-            <Route path="/internships" element={<Internships/>} />
-            <Route path="/plan" element={<Plan/>} />
-            <Route path="/clubs" element={<Clubs/> } />
-            <Route path="/facts" element={<Facts/> } />
+            <Route path="/" element={<MainMenu />} />
+            <Route path="/achievements" element={<Achievements />} />
+            <Route path="/olympiads" element={<Olympiads />} />
+            <Route path="/conferences" element={<Conferences />} />
+            <Route path="/internships" element={<Internships />} />
+            <Route path="/plan" element={<Plan />} />
+            <Route path="/clubs" element={<Clubs />} />
+            <Route path="/facts" element={<Facts />} />
         </Routes>
     );
 }
