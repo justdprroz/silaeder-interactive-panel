@@ -190,7 +190,7 @@ def sort_data_all_hobbies():
 	table = []
 	values_lines = models.Hobbies.objects.all()
 	for r in range(len(values_lines)):
-		url = f"static\media\clubs_photo\{values_lines[r].name}.jpg"
+		url = f"virtual_venv\static\media\clubs_photo\{values_lines[r].name}.jpg"
 		x = [
 		values_lines[r].name,
 		values_lines[r].teacher,
