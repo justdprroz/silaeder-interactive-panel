@@ -20,7 +20,9 @@ def gethobbies(request):
 	else:
 		output = "{}".format(sort_data_all_hobbies())
 		
+
 	return HttpResponse(output, content_type="application/json")
+	
 
 def getinternships(request):
 	output = "{}".format(sort_data_all_internships())
@@ -109,12 +111,11 @@ def sort_data_hobbies(title, objects: str): # name_base - название ба�
 		elif title == "teacher":
 			values_lines = models.Hobbies.objects.filter(head_teacher=i)
 		for r in range(len(values_lines)):
-			url = f"virtual_venv\clubs_photo\{values_lines[r].name}.jpg"
+			url = f"<img src=virtual_venv\clubs_photo\{values_lines[r].name}.jpg"
 			x = [
 			values_lines[r].name,
 			values_lines[r].teacher,
-			values_lines[r].subject,
-			url,]
+			values_lines[r].subject,]
 			table.append(x)
 	result_table = filters_hobbies(table)
 	return json.dumps(result_table)
@@ -189,13 +190,15 @@ def sort_data_all_hobbies():
 	table = []
 	values_lines = models.Hobbies.objects.all()
 	for r in range(len(values_lines)):
-		url = f"virtual_venv\clubs_photo\{values_lines[r].name}.jpg"
+		url = f"static\media\clubs_photo\{values_lines[r].name}.jpg"
 		x = [
 		values_lines[r].name,
 		values_lines[r].teacher,
 		values_lines[r].subject,
 		url,]
 		table.append(x)
+		with open(url, "rb") as f:
+			print(HttpResponse(f.read(), content_type="image/jpeg"))		
 	result_table = filters_hobbies(table)
 	return json.dumps(result_table)
 
