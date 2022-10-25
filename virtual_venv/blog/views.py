@@ -198,17 +198,14 @@ def sort_data_all_hobbies():
 		x = [
 		values_lines[r].name,
 		values_lines[r].teacher,
-<<<<<<< HEAD
 		values_lines[r].subject,
 		url,]
 		table.append(x)
 		with open(url, "rb") as f:
 			HttpResponse(f.read(), content_type="image/jpeg")	
-=======
-		values_lines[r].subject,]
+		values_lines[r].subject
 		getphoto(url)
 		table.append(x)		
->>>>>>> 8e1d4adf592fc91e17f3f879a6add5c6cdcc60c8
 	result_table = filters_hobbies(table)
 	return json.dumps(result_table)
 
