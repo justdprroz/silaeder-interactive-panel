@@ -190,7 +190,11 @@ def sort_data_all_hobbies():
 	table = []
 	values_lines = models.Hobbies.objects.all()
 	for r in range(len(values_lines)):
-		url = f"static/media/clubs_photo/{values_lines[r].name}.jpg"
+		url = "https://github.com/justdprroz/silaeder-interactive-panel/tree/master/virtual_venv/static/media/clubs_photo"
+		content = re.get(url)
+		soup = BeautifulSoup(content.text, "html.parser")
+		all_values = soup.find('div', class_="js-navigation-open Link--primary")
+		url1 = f"static/media/clubs_photo/{values_lines[r].name}.jpg"
 		x = [
 		values_lines[r].name,
 		values_lines[r].teacher,
@@ -198,7 +202,7 @@ def sort_data_all_hobbies():
 		url,]
 		table.append(x)
 		with open(url, "rb") as f:
-			print(HttpResponse(f.read(), content_type="image/jpeg"))		
+			HttpResponse(f.read(), content_type="image/jpeg")	
 	result_table = filters_hobbies(table)
 	return json.dumps(result_table)
 
