@@ -5,7 +5,6 @@ from requests import request
 from . import models
 import json
 import re
-from bs4 import BeautifulSoup
 
 def main(request):
     return render(request, 'blog/post_kist.html', {})
@@ -13,18 +12,19 @@ def main(request):
 def achievements(request):
 	return render(request, 'blog/achievements.html', {})
 
+def getphoto(url):
+	with open('static/media/clubs_photo/Го.jpg', "rb") as f:
+		return HttpResponse(f.read(), content_type="image/jpeg")
+
 def gethobbies(request):
 	if request.GET.get("subject", "") != '':
 		name_subject = request.GET.get("subject", "")
 		output =  "{}".format(sort_data_hobbies("subject", name_subject),)
 	else:
 		output = "{}".format(sort_data_all_hobbies())
-		
-
 	return HttpResponse(output, content_type="application/json")
-	
 
-def getinternships(request):
+def getinternships():
 	output = "{}".format(sort_data_all_internships())
 		
 	return HttpResponse(output, content_type="application/json")
@@ -198,11 +198,17 @@ def sort_data_all_hobbies():
 		x = [
 		values_lines[r].name,
 		values_lines[r].teacher,
+<<<<<<< HEAD
 		values_lines[r].subject,
 		url,]
 		table.append(x)
 		with open(url, "rb") as f:
 			HttpResponse(f.read(), content_type="image/jpeg")	
+=======
+		values_lines[r].subject,]
+		getphoto(url)
+		table.append(x)		
+>>>>>>> 8e1d4adf592fc91e17f3f879a6add5c6cdcc60c8
 	result_table = filters_hobbies(table)
 	return json.dumps(result_table)
 
